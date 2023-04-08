@@ -22,6 +22,26 @@ app.post("/", async (req, res) => {
   res.json(newUser);
 });
 
+// update user
+app.put("/:id", async (req, res) => {
+  const id = req.params.id;
+  const newAge = req.body.age;
+  const updatedUser = await prisma.user.update({
+    where: { id: parseInt(id) },
+    data: { age: newAge },
+  });
+  res.json(updatedUser);
+});
+
+// delete user
+app.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+  const deletedUser = await prisma.user.delete({
+    where: { id: parseInt(id) },
+  });
+  res.json(deletedUser);
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

@@ -42,6 +42,36 @@ app.delete("/:id", async (req, res) => {
   res.json(deletedUser);
 });
 
+// home
+app.post("/home", async (req, res) => {
+  const newHome = await prisma.home.create({ data: req.body });
+  res.json(newHome);
+});
+
+app.get("/homes", async (req, res) => {
+  const allHomes = await prisma.home.findMany({
+    include: {
+      owner: true,
+      builtBy: true,
+    },
+  });
+  res.json(allHomes);
+});
+
+app.get("/home/:id", async (req, res) => {
+  const id = req.params.id;
+  const home = await prisma.home.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      owner: true,
+      builtBy: true,
+    },
+  });
+  res.json(home);
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
